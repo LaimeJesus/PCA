@@ -10,9 +10,18 @@ import os
 from subprocess import PIPE
 import copy
 import numpy as np
+import pathlib
 
+from src.hypergraph import buildHypergraphComplement
+
+
+# @TODO issue with new-line ending: https://stackoverflow.com/questions/1889559/make-git-diff-ignore-m
 
 pca_shd_exec_path = "shd"
+if os.name != 'nt':
+    # @TODO hack to add current shd library path in non-windows operative system
+    current_path = str(pathlib.Path(__file__).parent.resolve())
+    pca_shd_exec_path = current_path + "/shd"
 
 def set_shd_path(p):
     pca_shd_exec_path = p
@@ -82,24 +91,18 @@ Transversals computation functions
 
 #Create a file containing the complement of the context
 def makeHypergraphFile(context,file):
-    f = open(file,"w")
-    
-    C = [[]]
-    for i in range(len(context)-1):
-        C = combi(C,context[i+1])
-    
-    for c in C:
-        if c not in context[0]:
-            summ=0
-            for e in range(len(c)-1):
-                f.write(str(summ+c[e]))
-                f.write(",")
-                summ=summ+context[e+1]
-            f.write(str(summ+c[len(c)-1]))
-            f.write("\n")
-    
-    f.close()
-    
+    HYPERGRAPH = buildHypergraphComplement(context)
+
+    with open(file, "w") as f:
+        '''
+        Given an edge: [0, 1, 2, ..., n]
+        This function returns an edge line with the format "0,1,2,...,n"
+        '''
+        to_edge_line = lambda edge: ','.join(map(str, edge))
+        edge_lines = '\n'.join(map(to_edge_line, HYPERGRAPH))
+        # @TODO writing entire string in a single write is faster than running multiple writes
+        f.write(edge_lines)
+
   
 #Creates a concept from a transversal by complementing 
 def trans2Concept(trans,context):
