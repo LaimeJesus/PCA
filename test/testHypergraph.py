@@ -1,6 +1,6 @@
 import unittest
 
-from hypergraph import _cartesian, _dimensions, _tuplesToList, buildHypergraphComplement
+from src.hypergraph import _cartesian, _dimensions, _tuplesToList, buildHypergraphComplement
 
 
 class TestHypergraph(unittest.TestCase):
