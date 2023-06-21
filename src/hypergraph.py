@@ -30,7 +30,7 @@ def _cartesian(lists: List):
 def buildHypergraphComplement(context: Context) -> List[List[int]]:
     '''
     Given a Context k with the form: [[[inc_11, .., inc_1n], .., [inc_n1, .., inc_nr]], d_i, ..., d_k]
-    It returns a Hypergraph with the complement of the minimal traversal of the context k
+    It returns a Hypergraph with the complement of the context k
     Example:
     buildHypergraph([[0, 1], [1, 2], [0, 2]], 3, 3)
     [[0, 3], [1, 3], [1, 4], [2, 3], [2, 4], [2, 5]]
