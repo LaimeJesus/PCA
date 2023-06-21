@@ -28,7 +28,7 @@ class TestHypergraph(unittest.TestCase):
         hg = buildHypergraphComplement(context)
         self.assertEqual(hg, [])
 
-    def test_buildHypergraphEmpty(self):
+    def test_buildHypergraphWithContext(self):
         context = [[[0, 1], [1, 2], [2, 3]], 3, 3]
         hg = buildHypergraphComplement(context)
         expected = [[0, 3], [0, 5], [1, 3], [1, 4], [2, 3], [2, 4], [2, 5]]
