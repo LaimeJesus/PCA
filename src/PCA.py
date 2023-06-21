@@ -9,8 +9,7 @@ import os
 import copy
 import numpy as np
 
-from src.hypergraph import buildHypergraphEdges, fromHypergraphToConcepts, complementConceptWithTraversals
-from src.shd import fromEdgesFileToHypergraph
+from src.concepts import createConceptFromContext, complementConceptWithTraversals
 
 
 # @TODO issue with new-line ending: https://stackoverflow.com/questions/1889559/make-git-diff-ignore-m
@@ -70,27 +69,6 @@ def logicalClosure(Set,Rules):
         if len(S) == s:
             fin = True         
     return set(S)
-
-
-
-'''
-Transversals computation functions
-'''
-
-
-#Create a file containing the complement of the context
-def makeHypergraphFile(context,file):
-    HYPERGRAPH = buildHypergraphEdges(context)
-
-    with open(file, "w") as f:
-        '''
-        Given an edge: [0, 1, 2, ..., n]
-        This function returns an edge line with the format "0,1,2,...,n"
-        '''
-        to_edge_line = lambda edge: ','.join(map(str, edge))
-        edge_lines = '\n'.join(map(to_edge_line, HYPERGRAPH))
-        # @TODO writing entire string in a single write is faster than running multiple writes
-        f.write(edge_lines)
 
 '''
 FCA functions
@@ -286,23 +264,10 @@ Main functions
 
 #Compute the concepts of a context
 def concepts(context):
-    HYPERGRAPH_FILE_PATH = "hypergraph.io"
-
-    #Create file for shd.exe
-    makeHypergraphFile(context, HYPERGRAPH_FILE_PATH)
-
-    #run shd.exe to obtain minimal tranversals
-    hypergraph = fromEdgesFileToHypergraph(HYPERGRAPH_FILE_PATH)
-    Concepts = fromHypergraphToConcepts(hypergraph)
-
-    #delete the file
-    os.remove(HYPERGRAPH_FILE_PATH)
+    Concepts = createConceptFromContext(context)
 
     #Complement the transversals to get the concepts
-    Concepts = complementConceptWithTraversals(Concepts, context)
-
-    return Concepts
-
+    return complementConceptWithTraversals(Concepts, context)
 
 
 #Builds an implication base from the proper premises of a 2D context
