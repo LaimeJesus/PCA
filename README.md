@@ -188,5 +188,5 @@ HOW TO TEST
 ================
 
 ```
-python -m unittest discover src/
+python -m unittest
 ```

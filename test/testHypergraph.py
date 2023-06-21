@@ -48,5 +48,9 @@ class TestHypergraph(unittest.TestCase):
         expected = [['3', '5', '4'], ['3', '5', '1', '2'], ['0', '3', '4', '2'], ['0', '1', '2']]
         self.assertEqual(concept, expected)
 
+    def test_traversalToConcept(self):
+        # @TODO NotImplemented
+        pass
+
 if __name__ == '__main__':
     unittest.main()

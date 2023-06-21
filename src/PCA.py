@@ -9,7 +9,7 @@ import os
 import copy
 import numpy as np
 
-from src.hypergraph import buildHypergraphEdges, fromHypergraphToConcepts
+from src.hypergraph import buildHypergraphEdges, fromHypergraphToConcepts, complementConceptWithTraversals
 from src.shd import fromEdgesFileToHypergraph
 
 
@@ -91,23 +91,6 @@ def makeHypergraphFile(context,file):
         edge_lines = '\n'.join(map(to_edge_line, HYPERGRAPH))
         # @TODO writing entire string in a single write is faster than running multiple writes
         f.write(edge_lines)
-
-  
-#Creates a concept from a transversal by complementing 
-def trans2Concept(trans,context):
-    
-    Concept = []
-    summ = 0
-    for i in range(1,len(context)):
-        Comp = []
-        for e in range(summ, summ+context[i]):
-            if str(e) not in trans:
-                Comp.append(int(e-summ))
-        Concept.append(set(Comp))
-        summ += context[i]
-    
-    return Concept
-
 
 '''
 FCA functions
@@ -303,8 +286,6 @@ Main functions
 
 #Compute the concepts of a context
 def concepts(context):
-    Concepts = []
-
     HYPERGRAPH_FILE_PATH = "hypergraph.io"
 
     #Create file for shd.exe
@@ -318,9 +299,8 @@ def concepts(context):
     os.remove(HYPERGRAPH_FILE_PATH)
 
     #Complement the transversals to get the concepts
-    for i in range(len(Concepts)):
-        Concepts[i] = trans2Concept(Concepts[i],context)
-    
+    Concepts = complementConceptWithTraversals(Concepts, context)
+
     return Concepts
 
 

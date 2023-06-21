@@ -102,3 +102,26 @@ def fromHypergraphToConcepts(M: str) -> List[List[str]]:
         R.pop(len(R)-1)
 
     return R
+
+# @TODO this function should be in a different file
+def traversalToConcept(traversal: List[str], context: Context):
+    BEGIN = 1
+    summ = 0
+    Concept = []
+    for _, value in enumerate(context[BEGIN:]):
+        # we can directly use Comp as a set because we does not allow repetition in this container
+        Comp = set()
+        for e in range(summ, summ + value):
+            if str(e) not in traversal:
+                # we can directly add this element as a number, because summ is a number and e is a number
+                new_element = e - summ
+                Comp.add(new_element)
+        Concept.append(Comp)
+        summ += value
+
+    return Concept
+
+# @TODO this function should be in a different file
+def complementConceptWithTraversals(Concepts: List[List[str]], context: Context):
+    # @TODO investigate why does it call traversal instead of concept!
+    return map(lambda traversal: traversalToConcept(traversal, context), Concepts)
