@@ -17,11 +17,11 @@ from src.hypergraph import buildHypergraphComplement
 
 # @TODO issue with new-line ending: https://stackoverflow.com/questions/1889559/make-git-diff-ignore-m
 
-pca_shd_exec_path = "shd"
+pca_shd_exec_path = "scripts/shd"
 if os.name != 'nt':
     # @TODO hack to add current shd library path in non-windows operative system
     current_path = str(pathlib.Path(__file__).parent.resolve())
-    pca_shd_exec_path = current_path + "/shd"
+    pca_shd_exec_path = current_path + "/scripts/shd"
 
 def set_shd_path(p):
     pca_shd_exec_path = p
