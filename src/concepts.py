@@ -47,7 +47,6 @@ def fromHypergraphToConcepts(M: str) -> List[List[str]]:
 
     return R
 
-# @TODO this function should be in a different file
 def fromTraversalToConcept(traversal: List[str], context: Context):
     BEGIN = 1
     summ = 0
@@ -65,7 +64,6 @@ def fromTraversalToConcept(traversal: List[str], context: Context):
 
     return Concept
 
-# @TODO this function should be in a different file
 def complementConceptWithTraversals(Concepts: List[List[str]], context: Context):
     # @TODO investigate why does it call traversal instead of concept!
     return map(lambda traversal: fromTraversalToConcept(traversal, context), Concepts)

@@ -36,7 +36,7 @@ def buildHypergraphEdges(context: Context) -> List[List[int]]:
     Given a Context k with the form: [[[inc_11, .., inc_1n], .., [inc_n1, .., inc_nr]], d_i, ..., d_k]
     It returns a Hypergraph with the complement of the context k
     Example:
-    buildHypergraph([[0, 1], [1, 2], [0, 2]], 3, 3)
+    buildHypergraph([[[0, 1], [1, 2], [0, 2]], 3, 3])
     [[0, 3], [1, 3], [1, 4], [2, 3], [2, 4], [2, 5]]
     '''
     if len(context) < 2: raise Exception("Context should have at least 2 params: ctx and size of ctx")
@@ -72,21 +72,19 @@ def formatHypergraphToString(hypergraph: List[List[int]]) -> str:
     to_edge_line = lambda edge: ','.join(map(str, edge))
     return '\n'.join(map(to_edge_line, hypergraph))
 
-#Create a file containing the complement of the context
-def makeHypergraphFile(context, file_target):
-    HYPERGRAPH = buildHypergraphEdges(context)
-
-    with open(file_target, "w") as f:
-        edge_lines = formatHypergraphToString(HYPERGRAPH)
+def writeHypergraphInFile(hypergraph: List[List[int]], hypergraph_path: str) -> None:
+    with open(hypergraph_path, "w") as f:
+        edge_lines = formatHypergraphToString(hypergraph)
         # @TODO writing entire string in a single write is faster than running multiple writes
         f.write(edge_lines)
 
-
-def createHypergraphFromContext(context: Context, hipergraph_path="hypergraph.io") -> str:
+def createHypergraphFromContext(context: Context, hypergraph_path="hypergraph.io") -> str:
     """
     Given a context this function returns a string which represents a context
     """
-    makeHypergraphFile(context, hipergraph_path)
-    result = fromEdgesFileToHypergraph(hipergraph_path)
-    os.remove(hipergraph_path)
+    HYPERGRAPH = buildHypergraphEdges(context)
+    writeHypergraphInFile(HYPERGRAPH, hypergraph_path)
+    result = fromEdgesFileToHypergraph(hypergraph_path)
+    # @TODO it should be easier to create a temporal file than removing it each time, current bug, file does not dissapear
+    os.remove(hypergraph_path)
     return result
