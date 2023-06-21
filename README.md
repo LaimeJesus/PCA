@@ -183,3 +183,10 @@ print(table)
 print([table[x] for x in Implis[4][0]]," -> ",[table[x] for x in Implis[4][1]])
 [[1, 0]]  ->  [[0, 0], [0, 1], [1, 0]]
 ```
+
+HOW TO TEST
+================
+
+```
+python -m unittest
+```
