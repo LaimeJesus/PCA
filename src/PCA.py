@@ -5,26 +5,15 @@ Created on Sat Jul 11 10:13:00 2020
 @author: abazin
 """
 
-import subprocess
 import os
-from subprocess import PIPE
 import copy
 import numpy as np
-import pathlib
 
-from src.hypergraph import buildHypergraphComplement
+from src.hypergraph import buildHypergraphEdges, fromHypergraphToConcepts
+from src.shd import fromEdgesFileToHypergraph
 
 
 # @TODO issue with new-line ending: https://stackoverflow.com/questions/1889559/make-git-diff-ignore-m
-
-pca_shd_exec_path = "scripts/shd"
-if os.name != 'nt':
-    # @TODO hack to add current shd library path in non-windows operative system
-    current_path = str(pathlib.Path(__file__).parent.resolve())
-    pca_shd_exec_path = current_path + "/scripts/shd"
-
-def set_shd_path(p):
-    pca_shd_exec_path = p
 
 
 '''
@@ -91,7 +80,7 @@ Transversals computation functions
 
 #Create a file containing the complement of the context
 def makeHypergraphFile(context,file):
-    HYPERGRAPH = buildHypergraphComplement(context)
+    HYPERGRAPH = buildHypergraphEdges(context)
 
     with open(file, "w") as f:
         '''
@@ -119,28 +108,6 @@ def trans2Concept(trans,context):
     
     return Concept
 
-
-def minTrans(hypergraph):
-    args = [pca_shd_exec_path,"0",hypergraph,"-"]
-    p = subprocess.Popen(args, stdin=PIPE, stdout=PIPE, text=True)
-    M =  p.communicate()[0]
-    
-    R = []
-    
-    T = M.split("\n")   
-    if len(T) > 1: 
-        maxiC = 0
-        for x in T:
-            c = x.split(" ")
-            R.append(c)
-            if len(c) > maxiC:
-                maxiC = len(c)
-        for i in range(maxiC+3):
-            R.pop(len(R)-1)
-    else:
-        print("shd did not return anything\n")
-    return R
-                
 
 '''
 FCA functions
@@ -337,18 +304,19 @@ Main functions
 #Compute the concepts of a context
 def concepts(context):
     Concepts = []
-    
-    #Create file for shd.exe
-    makeHypergraphFile(context,"hypergraph.io")
-    
-    #run shd.exe to obtain minimal tranversals
-    Concepts = minTrans("hypergraph.io")
-    
-    #delete the file
-    os.remove("hypergraph.io")
-    
 
-    
+    HYPERGRAPH_FILE_PATH = "hypergraph.io"
+
+    #Create file for shd.exe
+    makeHypergraphFile(context, HYPERGRAPH_FILE_PATH)
+
+    #run shd.exe to obtain minimal tranversals
+    hypergraph = fromEdgesFileToHypergraph(HYPERGRAPH_FILE_PATH)
+    Concepts = fromHypergraphToConcepts(hypergraph)
+
+    #delete the file
+    os.remove(HYPERGRAPH_FILE_PATH)
+
     #Complement the transversals to get the concepts
     for i in range(len(Concepts)):
         Concepts[i] = trans2Concept(Concepts[i],context)
