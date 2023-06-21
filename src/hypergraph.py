@@ -27,7 +27,7 @@ def _cartesian(lists: List):
     '''
     return _tuplesToList(product(*lists))
 
-def buildHypergraphComplement(context: Context) -> List[List[int]]:
+def buildHypergraphEdges(context: Context) -> List[List[int]]:
     '''
     Given a Context k with the form: [[[inc_11, .., inc_1n], .., [inc_n1, .., inc_nr]], d_i, ..., d_k]
     It returns a Hypergraph with the complement of the context k
@@ -59,3 +59,46 @@ def buildHypergraphComplement(context: Context) -> List[List[int]]:
             HYPERGRAPH.append(edges)
 
     return HYPERGRAPH
+
+def fromHypergraphToConcepts(M: str) -> List[List[str]]:
+    """
+    Given a Hypergraph with the following form:
+    a11 a12 ... a1n
+    b11 b12 ... b1m
+    ...
+    n11 ...
+    It returns
+    [['a11', 'a12', ..., 'a1n'], ['b11', 'b12', .., 'b1m'], .. ['n11',..]]
+    Hypergraph Example:
+    3 5 4
+    3 5 1 2
+    0 3 4 2
+    0 1 2
+    4
+    0
+    0
+    0
+    2
+    2
+    Result
+    [['3', '5', '4'], ['3', '5', '1', '2'], ['0', '3', '4', '2'], ['0', '1', '2']]
+    """
+    T = M.split("\n")
+
+    "@TODO it is too restrictive, this condition does not allow the creation of a graph with a single line!"
+    if len(T) == 1:
+        raise ValueError("M is not an Hypergraph")
+
+    R: List[List[str]] = []
+    maxiC = 0
+    for x in T:
+        c = x.split(" ")
+        R.append(c)
+        # maxiC is the starting index where the extra nodes needs to be removed from the Concepts
+        maxiC = max(maxiC, len(c))
+
+    MAGIC_NUMBER = 3
+    for _ in range(maxiC + MAGIC_NUMBER):
+        R.pop(len(R)-1)
+
+    return R
