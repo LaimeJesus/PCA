@@ -1,6 +1,6 @@
 [project]
 name = "PCA"
-version = "0.0.3"
+version = "0.0.7"
 authors = [
   {name = "Alexandre Bazin", email = "alexandre.bazin@lirmm.fr"},
 ]
