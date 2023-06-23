@@ -25,6 +25,7 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/LaimeJesus/PCA"
+"Bug Tracker" = "https://github.com/LaimeJesus/PCA/issues"
 
 [build-system]
 requires = ["setuptools"]
