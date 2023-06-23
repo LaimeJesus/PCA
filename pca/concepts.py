@@ -1,7 +1,7 @@
 
 from typing import List
 
-from src.pca.hypergraph import createHypergraphFromContext, Context
+from pca.hypergraph import createHypergraphFromContext, Context
 
 
 def fromHypergraphToConcepts(M: str) -> List[List[str]]:

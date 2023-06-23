@@ -1,7 +1,7 @@
 import unittest
 
-from src.pca.shd import shd_path, fromEdgesFileToHypergraph
-from src.pca.hypergraph import buildHypergraphEdges, writeHypergraphInFile
+from pca.shd import shd_path, fromEdgesFileToHypergraph
+from pca.hypergraph import buildHypergraphEdges, writeHypergraphInFile
 
 
 class TestShd(unittest.TestCase):
