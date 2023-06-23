@@ -1,8 +1,7 @@
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 
 
 setup(
-    packages=find_packages(exclude=["test"]),
+    packages=find_namespace_packages(exclude=['test']),
     include_package_data=True,
-    test_suite="tests",
 )
