@@ -1,7 +1,7 @@
-from setuptools import setup, find_namespace_packages
+from setuptools import setup, find_packages
 
 
 setup(
-    packages=find_namespace_packages(exclude=['test']),
+    packages=find_packages(exclude=['test']) + ['src/pca/scripts'],
     include_package_data=True,
 )
