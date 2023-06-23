@@ -1,6 +1,6 @@
 import unittest
 
-from src.concepts import fromHypergraphToConcepts
+from src.pca.concepts import fromHypergraphToConcepts
 
 
 class TestConcepts(unittest.TestCase):

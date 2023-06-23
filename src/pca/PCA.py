@@ -9,7 +9,7 @@ import os
 import copy
 import numpy as np
 
-from src.concepts import createConceptFromContext, complementConceptWithTraversals
+from src.pca.concepts import createConceptFromContext, complementConceptWithTraversals
 
 
 # @TODO issue with new-line ending: https://stackoverflow.com/questions/1889559/make-git-diff-ignore-m

@@ -3,7 +3,7 @@ import os
 from itertools import product
 from typing import Any, List, Tuple
 
-from src.shd import fromEdgesFileToHypergraph
+from src.pca.shd import fromEdgesFileToHypergraph
 
 Context = Tuple[List[List[int]], int, int]
 

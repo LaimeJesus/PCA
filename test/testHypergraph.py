@@ -1,6 +1,6 @@
 import unittest
 
-from src.hypergraph import _cartesian, _dimensions, _tuplesToList, buildHypergraphEdges
+from src.pca.hypergraph import _cartesian, _dimensions, _tuplesToList, buildHypergraphEdges
 
 
 class TestHypergraph(unittest.TestCase):
