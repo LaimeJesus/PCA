@@ -4,9 +4,7 @@ from pca.hypergraph import _cartesian, _dimensions, _tuplesToList, buildHypergra
 
 
 class TestHypergraph(unittest.TestCase):
-    '''
-    @TODO move this file into their own test folder
-    '''
+
     def test_dimensionsEmpty(self):
         self.assertEqual(_tuplesToList(_dimensions([])), [])
 
