@@ -1,5 +1,9 @@
+import os
+
 from itertools import product
 from typing import Any, List, Tuple
+
+from pca.shd import fromEdgesFileToHypergraph
 
 Context = Tuple[List[List[int]], int, int]
 
@@ -32,7 +36,7 @@ def buildHypergraphEdges(context: Context) -> List[List[int]]:
     Given a Context k with the form: [[[inc_11, .., inc_1n], .., [inc_n1, .., inc_nr]], d_i, ..., d_k]
     It returns a Hypergraph with the complement of the context k
     Example:
-    buildHypergraph([[0, 1], [1, 2], [0, 2]], 3, 3)
+    buildHypergraph([[[0, 1], [1, 2], [0, 2]], 3, 3])
     [[0, 3], [1, 3], [1, 4], [2, 3], [2, 4], [2, 5]]
     '''
     if len(context) < 2: raise Exception("Context should have at least 2 params: ctx and size of ctx")
@@ -60,68 +64,27 @@ def buildHypergraphEdges(context: Context) -> List[List[int]]:
 
     return HYPERGRAPH
 
-def fromHypergraphToConcepts(M: str) -> List[List[str]]:
+'''
+Given an edge: [0, 1, 2, ..., n]
+This function returns an edge line with the format "0,1,2,...,n"
+'''
+def formatHypergraphToString(hypergraph: List[List[int]]) -> str:
+    to_edge_line = lambda edge: ','.join(map(str, edge))
+    return '\n'.join(map(to_edge_line, hypergraph))
+
+def writeHypergraphInFile(hypergraph: List[List[int]], hypergraph_path: str) -> None:
+    with open(hypergraph_path, "w") as f:
+        edge_lines = formatHypergraphToString(hypergraph)
+        # @TODO writing entire string in a single write is faster than running multiple writes
+        f.write(edge_lines)
+
+def createHypergraphFromContext(context: Context, hypergraph_path="hypergraph.io") -> str:
     """
-    Given a Hypergraph with the following form:
-    a11 a12 ... a1n
-    b11 b12 ... b1m
-    ...
-    n11 ...
-    It returns
-    [['a11', 'a12', ..., 'a1n'], ['b11', 'b12', .., 'b1m'], .. ['n11',..]]
-    Hypergraph Example:
-    3 5 4
-    3 5 1 2
-    0 3 4 2
-    0 1 2
-    4
-    0
-    0
-    0
-    2
-    2
-    Result
-    [['3', '5', '4'], ['3', '5', '1', '2'], ['0', '3', '4', '2'], ['0', '1', '2']]
+    Given a context this function returns a string which represents a context
     """
-    T = M.split("\n")
-
-    "@TODO it is too restrictive, this condition does not allow the creation of a graph with a single line!"
-    if len(T) == 1:
-        raise ValueError("M is not an Hypergraph")
-
-    R: List[List[str]] = []
-    maxiC = 0
-    for x in T:
-        c = x.split(" ")
-        R.append(c)
-        # maxiC is the starting index where the extra nodes needs to be removed from the Concepts
-        maxiC = max(maxiC, len(c))
-
-    MAGIC_NUMBER = 3
-    for _ in range(maxiC + MAGIC_NUMBER):
-        R.pop(len(R)-1)
-
-    return R
-
-# @TODO this function should be in a different file
-def traversalToConcept(traversal: List[str], context: Context):
-    BEGIN = 1
-    summ = 0
-    Concept = []
-    for _, value in enumerate(context[BEGIN:]):
-        # we can directly use Comp as a set because we does not allow repetition in this container
-        Comp = set()
-        for e in range(summ, summ + value):
-            if str(e) not in traversal:
-                # we can directly add this element as a number, because summ is a number and e is a number
-                new_element = e - summ
-                Comp.add(new_element)
-        Concept.append(Comp)
-        summ += value
-
-    return Concept
-
-# @TODO this function should be in a different file
-def complementConceptWithTraversals(Concepts: List[List[str]], context: Context):
-    # @TODO investigate why does it call traversal instead of concept!
-    return map(lambda traversal: traversalToConcept(traversal, context), Concepts)
+    HYPERGRAPH = buildHypergraphEdges(context)
+    writeHypergraphInFile(HYPERGRAPH, hypergraph_path)
+    result = fromEdgesFileToHypergraph(hypergraph_path)
+    # @TODO it should be easier to create a temporal file than removing it each time, current bug, file does not dissapear
+    os.remove(hypergraph_path)
+    return result

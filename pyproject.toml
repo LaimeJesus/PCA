@@ -1,0 +1,32 @@
+[project]
+name = "PCA"
+version = "0.0.7"
+authors = [
+  {name = "Alexandre Bazin", email = "alexandre.bazin@lirmm.fr"},
+]
+description = "This module provides functions for computing formal concepts and rules bases in both bidimensional and multidimensional formal contexts."
+keywords = ["PCA"]
+readme = "README.md"
+requires-python = ">=3"
+classifiers = [
+  "Development Status :: 1 - Planning",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Operating System :: OS Independent",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Intended Audience :: Education",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Developers",
+]
+dependencies = [
+  "numpy>=1.24.3"
+]
+
+[project.urls]
+Homepage = "https://github.com/LaimeJesus/PCA"
+"Bug Tracker" = "https://github.com/LaimeJesus/PCA/issues"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
